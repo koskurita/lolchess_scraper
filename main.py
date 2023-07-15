@@ -8,10 +8,10 @@ soup = BeautifulSoup(r.content, 'lxml')
 
 all_data = []
 
-
-
 games = soup.find_all('div', {"class": "profile__match-history-v2__item"})
 for game in games:
+    match_data = []
+    
     # class has last char as the placement
     _placement = game.get('class')[1][-1]
     
@@ -42,10 +42,12 @@ for game in games:
         t = trait.find('img').attrs['alt'][2:]
         _traits.append((t, t_cnt))
     
+    match_data = [_placement, _augments, _traits, _champions]
+    all_data.append(match_data)
     
-    
-    
-        
-        
-    # print(_placement, _augments)
-    
+with open ('matches.csv', 'w') as new_file:
+    fieldnames = ['placement', 'augments', 'traits', 'champions']
+    csv_writer = csv.DictWriter(new_file, fieldnames=fieldnames)
+    csv_writer.writeheader()
+    for pl, au, tr, ch in all_data:
+        csv_writer.writerow({'placement': pl, 'augments': au, 'traits': tr, 'champions': ch})
