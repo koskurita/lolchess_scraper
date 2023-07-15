@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup
 import requests
 import csv
+import ast
 
 r = requests.get('https://lolchess.gg/profile/na/quoll/s9/matches/ranked')
 source = r.content
@@ -51,3 +52,28 @@ with open ('matches.csv', 'w') as new_file:
     csv_writer.writeheader()
     for pl, au, tr, ch in all_data:
         csv_writer.writerow({'placement': pl, 'augments': au, 'traits': tr, 'champions': ch})
+        
+
+dic = {}
+with open ('matches.csv', 'r') as read_file:
+    csv_reader = csv.DictReader(read_file)
+    for line in csv_reader:
+        placement = int(line['placement'])
+        augments = ast.literal_eval(line['augments'])
+        for aug in augments:
+            if aug in dic:
+                dic[aug].append(placement)
+            else:
+                dic[aug] = [placement]
+    
+
+store = []
+for key, val in dic.items():
+    res = 0
+    for v in val:
+        res += v
+    res /= len(val)
+    store.append((key, res))
+
+for i, j in store:
+    print(i, ": ", j)
