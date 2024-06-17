@@ -8,5 +8,5 @@ This program allows users to effectively get around the ban by manually collecti
 ## How to use
 1. run the command in the terminal: python main.py
 
-##Viewing the data
+## Viewing the data
 This program will list the augments in order from highest average placement to lowest with a sample size of 30. 
